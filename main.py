@@ -1,31 +1,18 @@
-import glob
+import cv2
+import matplotlib.pyplot as plt
 
-from src.predictor import predictor
+from src.noise_test import add_gaussian_noise
 
-correct = 0
-total = 0
+image = cv2.imread("data/threaded/image1.jpg", cv2.IMREAD_GRAYSCALE)
 
-print("Threaded")
-for path in sorted(glob.glob("data/threaded/*.jpg")):
+noisy = add_gaussian_noise(image, 0.05)
 
-    pred, score = predictor(path)
+plt.subplot(1,2,1)
+plt.imshow(image, cmap="gray")
+plt.title("Original")
 
-    print(path, pred, f"{score:.2f}")
+plt.subplot(1,2,2)
+plt.imshow(noisy, cmap="gray")
+plt.title("Noisy")
 
-    correct += (pred == 1)
-    total += 1
-
-print()
-
-print("Non-threaded")
-for path in sorted(glob.glob("data/non_threaded/*.jpg")):
-
-    pred, score = predictor(path)
-
-    print(path, pred, f"{score:.2f}")
-
-    correct += (pred == 0)
-    total += 1
-
-print()
-print(f"Accuracy = {100 * correct / total:.1f}%")
+plt.show()
