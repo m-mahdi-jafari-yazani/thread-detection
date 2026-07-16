@@ -1,43 +1,36 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
-from src.fft_detector import generate_cosine, compute_fft
+from src.fft_detector import fft_from_image
 
-image1 = generate_cosine(
-    size=256,
-    fx=8,
-    fy=0
+
+threaded_image, threaded_fft = fft_from_image(
+    "data/threaded/image1.jpg"
 )
 
-image2 = generate_cosine(
-    size=256,
-    fx=6,
-    fy=6
+non_threaded_image, non_threaded_fft = fft_from_image(
+    "data/non_threaded/image1.jpg"
 )
-
-fft1 = compute_fft(image1)
-fft2 = compute_fft(image2)
 
 plt.figure(figsize=(10, 8))
 
 plt.subplot(2, 2, 1)
-plt.imshow(image1, cmap="gray")
-plt.title("Cosine 1")
+plt.imshow(threaded_image, cmap="gray")
+plt.title("Threaded")
 plt.axis("off")
 
 plt.subplot(2, 2, 2)
-plt.imshow(fft1, cmap="gray")
-plt.title("FFT 1")
+plt.imshow(threaded_fft, cmap="gray")
+plt.title("Threaded FFT")
 plt.axis("off")
 
 plt.subplot(2, 2, 3)
-plt.imshow(image2, cmap="gray")
-plt.title("Cosine 2")
+plt.imshow(non_threaded_image, cmap="gray")
+plt.title("Non-threaded")
 plt.axis("off")
 
 plt.subplot(2, 2, 4)
-plt.imshow(fft2, cmap="gray")
-plt.title("FFT 2")
+plt.imshow(non_threaded_fft, cmap="gray")
+plt.title("Non-threaded FFT")
 plt.axis("off")
 
 plt.tight_layout()

@@ -1,4 +1,5 @@
 import numpy as np
+from src.image_utils import load_image
 
 
 def generate_cosine(size, fx, fy):
@@ -32,3 +33,14 @@ def compute_fft(image):
     magnitude = np.log1p(np.abs(fft_shifted))
 
     return magnitude
+
+
+def fft_from_image(path, scale=0.5):
+    """
+    Load an image and compute its FFT magnitude.
+    """
+
+    image = load_image(path, scale)
+    spectrum = compute_fft(image)
+
+    return image, spectrum
