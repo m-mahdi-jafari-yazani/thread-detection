@@ -2,6 +2,7 @@ import glob
 
 import cv2
 import numpy as np
+import os
 
 from src.predictor import predictor
 
@@ -70,5 +71,8 @@ def evaluate_noise(variance):
             correct += 1
 
     accuracy = correct / len(dataset)
+
+    if os.path.exists("temp.jpg"):
+        os.remove("temp.jpg")
 
     return accuracy
