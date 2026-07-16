@@ -1,35 +1,44 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
-from src.image_utils import load_image
-from src.filters import (
-    generate_filter_bank,
-    apply_filter
+from src.fft_detector import generate_cosine, compute_fft
+
+image1 = generate_cosine(
+    size=256,
+    fx=8,
+    fy=0
 )
 
-image = load_image(
-    "data/non_threaded/image1.jpg",
-    scale=0.5
+image2 = generate_cosine(
+    size=256,
+    fx=6,
+    fy=6
 )
 
-filters = generate_filter_bank()
+fft1 = compute_fft(image1)
+fft2 = compute_fft(image2)
 
-scores = []
+plt.figure(figsize=(10, 8))
 
-for kernel in filters:
+plt.subplot(2, 2, 1)
+plt.imshow(image1, cmap="gray")
+plt.title("Cosine 1")
+plt.axis("off")
 
-    response = apply_filter(image, kernel)
+plt.subplot(2, 2, 2)
+plt.imshow(fft1, cmap="gray")
+plt.title("FFT 1")
+plt.axis("off")
 
-    score = np.mean(np.abs(response))
+plt.subplot(2, 2, 3)
+plt.imshow(image2, cmap="gray")
+plt.title("Cosine 2")
+plt.axis("off")
 
-    scores.append(score)
+plt.subplot(2, 2, 4)
+plt.imshow(fft2, cmap="gray")
+plt.title("FFT 2")
+plt.axis("off")
 
-best_score = max(scores)
-
-print(f"Best Response = {best_score:.2f}")
-
-plt.bar(range(len(scores)), scores)
-plt.title("Filter Responses")
-plt.xlabel("Filter Index")
-plt.ylabel("Response")
+plt.tight_layout()
 plt.show()
