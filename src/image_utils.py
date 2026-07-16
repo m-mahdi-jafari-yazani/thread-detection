@@ -19,3 +19,18 @@ def load_image(path, scale=0.5):
     resized = cv2.resize(gray, (width, height))
 
     return resized
+
+def crop_thread_region(image):
+    """
+    Keep only the central horizontal band where the threads are.
+    """
+
+    h, w = image.shape
+
+    top = int(h * 0.30)
+    bottom = int(h * 0.70)
+
+    left = int(w * 0.10)
+    right = int(w * 0.90)
+
+    return image[top:bottom, left:right]

@@ -1,37 +1,31 @@
-import matplotlib.pyplot as plt
+import glob
 
-from src.fft_detector import fft_from_image
+from src.predictor import predictor
 
+correct = 0
+total = 0
 
-threaded_image, threaded_fft = fft_from_image(
-    "data/threaded/image1.jpg"
-)
+print("Threaded")
+for path in sorted(glob.glob("data/threaded/*.jpg")):
 
-non_threaded_image, non_threaded_fft = fft_from_image(
-    "data/non_threaded/image1.jpg"
-)
+    pred, score = predictor(path)
 
-plt.figure(figsize=(10, 8))
+    print(path, pred, f"{score:.2f}")
 
-plt.subplot(2, 2, 1)
-plt.imshow(threaded_image, cmap="gray")
-plt.title("Threaded")
-plt.axis("off")
+    correct += (pred == 1)
+    total += 1
 
-plt.subplot(2, 2, 2)
-plt.imshow(threaded_fft, cmap="gray")
-plt.title("Threaded FFT")
-plt.axis("off")
+print()
 
-plt.subplot(2, 2, 3)
-plt.imshow(non_threaded_image, cmap="gray")
-plt.title("Non-threaded")
-plt.axis("off")
+print("Non-threaded")
+for path in sorted(glob.glob("data/non_threaded/*.jpg")):
 
-plt.subplot(2, 2, 4)
-plt.imshow(non_threaded_fft, cmap="gray")
-plt.title("Non-threaded FFT")
-plt.axis("off")
+    pred, score = predictor(path)
 
-plt.tight_layout()
-plt.show()
+    print(path, pred, f"{score:.2f}")
+
+    correct += (pred == 0)
+    total += 1
+
+print()
+print(f"Accuracy = {100 * correct / total:.1f}%")

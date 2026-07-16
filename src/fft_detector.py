@@ -44,3 +44,24 @@ def fft_from_image(path, scale=0.5):
     spectrum = compute_fft(image)
 
     return image, spectrum
+
+
+def remove_low_frequencies(spectrum, radius=20):
+    """
+    Remove low-frequency components (center of FFT).
+    """
+
+    filtered = spectrum.copy()
+
+    h, w = filtered.shape
+
+    cy = h // 2
+    cx = w // 2
+
+    Y, X = np.ogrid[:h, :w]
+
+    mask = (X - cx) ** 2 + (Y - cy) ** 2 <= radius ** 2
+
+    filtered[mask] = 0
+
+    return filtered
