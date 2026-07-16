@@ -1,14 +1,15 @@
 import matplotlib.pyplot as plt
 
-from src.image_utils import load_image
+from src.filters import cosine_filter
 
 
-image = load_image(
-    "data/threaded/image1.jpg",
-    scale=0.5
+kernel = cosine_filter(
+    size=31,
+    a=0.5,
+    b=0.3
 )
 
-plt.imshow(image, cmap="gray")
-plt.title("Threaded Screw")
-plt.axis("off")
+plt.imshow(kernel, cmap="gray")
+plt.title("Cosine Filter")
+plt.colorbar()
 plt.show()
