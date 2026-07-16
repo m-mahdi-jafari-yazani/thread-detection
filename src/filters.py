@@ -32,3 +32,37 @@ def apply_filter(image, kernel):
     )
 
     return response
+
+
+
+def generate_filter_bank(size=31):
+    """
+    Generate cosine filters with different
+    frequencies and orientations.
+    """
+
+    filters = []
+
+    frequencies = [0.2, 0.4, 0.6]
+
+    angles = [
+        0,
+        np.pi / 6,
+        np.pi / 3,
+        np.pi / 2,
+        2 * np.pi / 3,
+        5 * np.pi / 6
+    ]
+
+    for freq in frequencies:
+
+        for angle in angles:
+
+            a = freq * np.cos(angle)
+            b = freq * np.sin(angle)
+
+            kernel = cosine_filter(size, a, b)
+
+            filters.append(kernel)
+
+    return filters

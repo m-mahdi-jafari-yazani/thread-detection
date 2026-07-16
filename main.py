@@ -1,38 +1,35 @@
+import numpy as np
 import matplotlib.pyplot as plt
 
 from src.image_utils import load_image
-from src.filters import cosine_filter, apply_filter
-
+from src.filters import (
+    generate_filter_bank,
+    apply_filter
+)
 
 image = load_image(
-    "data/threaded/image1.jpg",
+    "data/non_threaded/image1.jpg",
     scale=0.5
 )
 
-kernel = cosine_filter(
-    size=31,
-    a=0.5,
-    b=0.3
-)
+filters = generate_filter_bank()
 
-response = apply_filter(image, kernel)
+scores = []
 
-plt.figure(figsize=(12, 4))
+for kernel in filters:
 
-plt.subplot(1, 3, 1)
-plt.imshow(image, cmap="gray")
-plt.title("Input")
-plt.axis("off")
+    response = apply_filter(image, kernel)
 
-plt.subplot(1, 3, 2)
-plt.imshow(kernel, cmap="gray")
-plt.title("Cosine Filter")
-plt.axis("off")
+    score = np.mean(np.abs(response))
 
-plt.subplot(1, 3, 3)
-plt.imshow(response, cmap="gray")
-plt.title("Convolution")
-plt.axis("off")
+    scores.append(score)
 
-plt.tight_layout()
+best_score = max(scores)
+
+print(f"Best Response = {best_score:.2f}")
+
+plt.bar(range(len(scores)), scores)
+plt.title("Filter Responses")
+plt.xlabel("Filter Index")
+plt.ylabel("Response")
 plt.show()
